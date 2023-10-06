@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ingredients', function (Blueprint $table) {
+        Schema::create('languages', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table ->string('slug')->unique();
+            $table->string('locale')->unique();  // npr. 'en', 'hr', 'de'
+            $table->string('name');  // npr. 'English', 'Hrvatski', 'Deutsch'
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ingredients');
+        Schema::dropIfExists('languages');
     }
 };

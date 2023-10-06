@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table ->string('slug');
-            $table->timestamps();
+        Schema::table('meals', function (Blueprint $table) {
+            $table->timestamp('deleted_at')->nullable()->after('updated_at');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category');
+        Schema::table('meals', function (Blueprint $table) {
+            $table->dropColumn('deleted_at');
+        });
     }
 };

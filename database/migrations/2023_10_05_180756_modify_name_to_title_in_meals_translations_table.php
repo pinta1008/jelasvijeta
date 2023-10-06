@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ingredients', function (Blueprint $table) {
-            $table->id();
+        Schema::table('meals_translations', function (Blueprint $table) {
+            // Drop name column
+            $table->dropColumn('name');
+            
+            // Add title column
             $table->string('title');
-            $table ->string('slug')->unique();
-            $table->timestamps();
         });
     }
 
@@ -24,6 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ingredients');
+        Schema::table('meals_translations', function (Blueprint $table) {
+            $table->dropColumn('title');
+            $table->string('name');
+        });
     }
 };

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ingredients', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table ->string('slug')->unique();
-            $table->timestamps();
+        Schema::table('meals', function (Blueprint $table) {
+            $table->dropColumn('ingredient_id');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ingredients');
+        Schema::table('meals', function (Blueprint $table) {
+            $table->unsignedBigInteger('ingredient_id')->nullable(); // Vraćamo ga kao nullable za slučaj povratka promjena
+        });
     }
 };

@@ -4,8 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Jela Svijeta</title>
-
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -14,8 +12,13 @@
     <body>
         <div class="content">
             <div class="title m-b-md">
-                Jela Svijeta
+                Meals
             </div>
+            @foreach($meals as $meal)
+            <div>
+                
+            </div>
+            @endforeach
         </div>
     </body>
 </html>
