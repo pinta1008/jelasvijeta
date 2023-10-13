@@ -5,6 +5,9 @@ namespace Database\Factories;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
+use FakerRestaurant\Provider\en_US\Restaurant as FakerRestaurantEn;
+use FakerRestaurant\Provider\de_DE\Restaurant as FakerRestaurantDe;
 
 class CategoryFactory extends Factory
 {
@@ -17,13 +20,31 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $this->faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($this->faker));
+       
+        return [];
+    }
 
-        do
-        {
-            $title = $this->faker->unique()->meatName();
-        } while (Category::where('title', $title)->exists());
+    public function configure()
+    {
+        $fakerEn = Faker::create('en_US'); // English
+        $fakerEn->addProvider(new FakerRestaurantEn($fakerEn));
 
-        return ['title' => $title];
+        $fakerDe = Faker::create('de_DE'); // German
+        $fakerDe->addProvider(new FakerRestaurantDe($fakerDe));
+
+        return $this->afterCreating(function (Category $category) use ($fakerEn, $fakerDe) {
+            // Creating English translation
+            $englishTitle = $fakerEn->unique()->meatName();
+            $category->translateOrNew('en')->title = $englishTitle;
+            $category->save();
+
+            // Creating Croatian translation using faker
+            $category->translateOrNew('hr')->title = $this->faker->unique()->word();
+            $category->save();
+
+            // Creating German translation using faker
+            $category->translateOrNew('de')->title = $fakerDe->unique()->meatName();
+            $category->save();
+        });
     }
 }

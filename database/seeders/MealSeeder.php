@@ -13,12 +13,12 @@ class MealSeeder extends Seeder
      */
     public function run(): void
     {
-        $meal = Meals::find(6);
-        $ingredientIds = [9,10];
+        $meal = Meals::find(2);
+        $ingredientIds = [3,4];
         $meal->ingredients()->attach($ingredientIds);
 
-        $meal = Meals::find(6);
-        $tagIds = [7,8];
+        $meal = Meals::find(2);
+        $tagIds = [2,3,4];
         $meal->tags()->attach($tagIds);
     }
 }

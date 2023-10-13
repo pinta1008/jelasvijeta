@@ -5,6 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Ingredients;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
+use FakerRestaurant\Provider\en_US\Restaurant as FakerRestaurantEn;
+use FakerRestaurant\Provider\de_DE\Restaurant as FakerRestaurantDe;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ingredients>
@@ -20,13 +23,30 @@ class IngredientsFactory extends Factory
      */
     public function definition(): array
     {
-        $this->faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($this->faker));
 
-        do 
-        {
-            $title = $this->faker->unique()->vegetableName();
-        } while (Ingredients::where('title', $title)->exists());
+        return [];
+    }
+    public function configure()
+    {
+        $fakerEn = Faker::create('en_US'); // English
+        $fakerEn->addProvider(new FakerRestaurantEn($fakerEn));
 
-        return ['title' => $title];
+        $fakerDe = Faker::create('de_DE'); // German
+        $fakerDe->addProvider(new FakerRestaurantDe($fakerDe));
+
+        return $this->afterCreating(function (Ingredients $ingredient) use ($fakerEn, $fakerDe) {
+            // Creating English translation
+            $englishTitle = $fakerEn->unique()->vegetableName();
+            $ingredient->translateOrNew('en')->title = $englishTitle;
+            $ingredient->save();
+
+            // Creating Croatian translation using faker
+            $ingredient->translateOrNew('hr')->title = $this->faker->unique()->word();
+            $ingredient->save();
+
+            // Creating German translation using faker
+            $ingredient->translateOrNew('de')->title = $fakerDe->unique()->vegetableName();
+            $ingredient->save();
+        });
     }
 }

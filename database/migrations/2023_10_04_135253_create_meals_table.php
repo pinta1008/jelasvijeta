@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('meals', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table ->string('description');
             $table ->string('status');
             $table ->integer('category_id')->nullable();
             $table ->integer('tag_id');

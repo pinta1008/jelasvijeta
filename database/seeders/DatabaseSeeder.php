@@ -13,12 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\Category::factory(5)->create();
 
-       // \App\Models\Meals::factory(20)->create();
-
-      // \App\Models\Tags::factory(8)->create();
-
-        //DB::table('tags_translations') ->truncate();
     }
 }

@@ -6,6 +6,8 @@ use App\Models\Meals;
 use App\Http\Requests\MealRequest;
 use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Http\Resources\MealResource;
 
 class MealController extends Controller
 {
@@ -93,11 +95,26 @@ class MealController extends Controller
                 }
             }
 
-            return $meals;
+            return MealResource::collection($meals);
         }
 
-        // Default behavior (pagination)
+        // Paginacija i promjene u izgledu paginacije
         $per_page = $request->input('per_page', 10);
-        return $query->paginate($per_page);
+        $paginated = $query->paginate($per_page)->appends($request->except(['page']));
+
+    return [
+        'meta' => [
+            'currentPage' => $paginated->currentPage(),
+            'totalItems' => $paginated->total(),
+            'itemsPerPage' => $paginated->perPage(),
+            'totalPages' => $paginated->lastPage(),
+        ],
+        'data' => MealResource::collection($paginated->items()), 
+        'links' => [
+            'prev' => $paginated->previousPageUrl(),
+            'next' => $paginated->nextPageUrl(),
+            'self' => $paginated->url($paginated->currentPage())
+        ]
+    ];
     }
 }

@@ -16,28 +16,6 @@ class IngredientTranslationSeeder extends Seeder
      */
     public function run()
     {
-        $fakerEn = Faker::create('en_US'); // Engleski
-        $fakerEn->addProvider(new FakerRestaurantEn($fakerEn));
-
-        $fakerDe = Faker::create('de_DE'); // Njemački
-        $fakerDe->addProvider(new FakerRestaurantDe($fakerDe));
-
-        $fakerHr = Faker::create('hr_HR'); // Hrvatski
-    
-        $ingredients = Ingredients::all();
-    
-        foreach ($ingredients as $ingredient) 
-        {
-            // Engleski
-            $ingredient->translateOrNew('en')->title = $fakerEn->vegetableName();
-
-            // Hrvatski
-            $ingredient->translateOrNew('hr')->title = $fakerHr->word;
-    
-            // Njemački
-            $ingredient->translateOrNew('de')->title = $fakerDe->vegetableName();
-    
-            $ingredient->save();
-        }
+        \App\Models\Ingredients::factory(5)->create();
     }
 }
