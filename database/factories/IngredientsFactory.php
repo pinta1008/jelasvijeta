@@ -28,23 +28,25 @@ class IngredientsFactory extends Factory
     }
     public function configure()
     {
-        $fakerEn = Faker::create('en_US'); // English
+        $fakerEn = Faker::create('en_US'); // Eng
         $fakerEn->addProvider(new FakerRestaurantEn($fakerEn));
 
-        $fakerDe = Faker::create('de_DE'); // German
+        $fakerDe = Faker::create('de_DE'); // Njemački
         $fakerDe->addProvider(new FakerRestaurantDe($fakerDe));
 
-        return $this->afterCreating(function (Ingredients $ingredient) use ($fakerEn, $fakerDe) {
-            // Creating English translation
+        $fakerHr = Faker::create('hr_HR'); // Hrvatski
+
+        return $this->afterCreating(function (Ingredients $ingredient) use ($fakerEn, $fakerDe, $fakerHr) {
+            // Prijevod Eng
             $englishTitle = $fakerEn->unique()->vegetableName();
             $ingredient->translateOrNew('en')->title = $englishTitle;
             $ingredient->save();
 
-            // Creating Croatian translation using faker
-            $ingredient->translateOrNew('hr')->title = $this->faker->unique()->word();
+            // Prijevod Hr
+            $ingredient->translateOrNew('hr')->title = $fakerHr->unique()->word();
             $ingredient->save();
 
-            // Creating German translation using faker
+            // Prijevod Njem
             $ingredient->translateOrNew('de')->title = $fakerDe->unique()->vegetableName();
             $ingredient->save();
         });

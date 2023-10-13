@@ -26,23 +26,25 @@ class CategoryFactory extends Factory
 
     public function configure()
     {
-        $fakerEn = Faker::create('en_US'); // English
+        $fakerEn = Faker::create('en_US'); // Eng
         $fakerEn->addProvider(new FakerRestaurantEn($fakerEn));
 
-        $fakerDe = Faker::create('de_DE'); // German
+        $fakerDe = Faker::create('de_DE'); // Njemački
         $fakerDe->addProvider(new FakerRestaurantDe($fakerDe));
 
-        return $this->afterCreating(function (Category $category) use ($fakerEn, $fakerDe) {
-            // Creating English translation
+        $fakerHr = Faker::create('hr_HR'); // Hrvatski
+
+        return $this->afterCreating(function (Category $category) use ($fakerEn, $fakerDe, $fakerHr) {
+            // Prijevod Eng
             $englishTitle = $fakerEn->unique()->meatName();
             $category->translateOrNew('en')->title = $englishTitle;
             $category->save();
 
-            // Creating Croatian translation using faker
-            $category->translateOrNew('hr')->title = $this->faker->unique()->word();
+            // Prijevod Hr
+            $category->translateOrNew('hr')->title = $fakerHr->unique()->word();
             $category->save();
 
-            // Creating German translation using faker
+            // Prijevod Njem
             $category->translateOrNew('de')->title = $fakerDe->unique()->meatName();
             $category->save();
         });

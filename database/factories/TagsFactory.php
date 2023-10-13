@@ -26,13 +26,13 @@ class TagsFactory extends Factory
     }
     public function configure()
     {
-        $fakerEn = Faker::create('en_US'); // English
+        $fakerEn = Faker::create('en_US'); // Eng
         $fakerEn->addProvider(new FakerRestaurantEn($fakerEn));
 
-        $fakerDe = Faker::create('de_DE'); // German
+        $fakerDe = Faker::create('de_DE'); // Njem
         $fakerDe->addProvider(new FakerRestaurantDe($fakerDe));
 
-        $fakerHr = \Faker\Factory::create('hr_HR'); // Hrvatski
+        $fakerHr = Faker::create('hr_HR'); // Hrvatski
 
         return $this->afterCreating(function (Tags $tag) use ($fakerEn, $fakerDe, $fakerHr) {
             // Creating English translation
